@@ -1,24 +1,26 @@
 package web.paginas;
 
 import org.openqa.selenium.By;
+import org.openqa.selenium.JavascriptExecutor;
 import org.openqa.selenium.WebDriver;
+import org.openqa.selenium.WebElement;
+import org.openqa.selenium.support.ui.ExpectedConditions;
+import org.openqa.selenium.support.ui.WebDriverWait;
+import java.time.Duration;
 
 public class PaginaLogin {
     private WebDriver navegador;
-
-    // Mapeamento de elementos
-    private By campoUsuario = By.id("user-name");
-    private By campoSenha = By.id("password");
-    private By botaoLogin = By.id("login-button");
 
     public PaginaLogin(WebDriver navegador) {
         this.navegador = navegador;
     }
 
-    // Ações na página
     public void fazerLogin(String usuario, String senha) {
-        navegador.findElement(campoUsuario).sendKeys(usuario);
-        navegador.findElement(campoSenha).sendKeys(senha);
-        navegador.findElement(botaoLogin).click();
+        WebDriverWait wait = new WebDriverWait(navegador, Duration.ofSeconds(15));
+        wait.until(ExpectedConditions.visibilityOfElementLocated(By.id("user-name"))).sendKeys(usuario);
+        navegador.findElement(By.id("password")).sendKeys(senha);
+
+        WebElement botao = navegador.findElement(By.id("login-button"));
+        ((JavascriptExecutor) navegador).executeScript("arguments[0].click();", botao);
     }
 }
