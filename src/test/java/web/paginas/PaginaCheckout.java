@@ -2,6 +2,9 @@ package web.paginas;
 
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
+import org.openqa.selenium.support.ui.WebDriverWait;
+import org.openqa.selenium.support.ui.ExpectedConditions;
+import java.time.Duration;
 
 public class PaginaCheckout {
     private WebDriver navegador;
@@ -18,6 +21,9 @@ public class PaginaCheckout {
     }
 
     public void preencherDadosEContinuar(String nome, String sobrenome, String cep) {
+        WebDriverWait wait = new WebDriverWait(navegador, Duration.ofSeconds(10));
+        wait.until(ExpectedConditions.visibilityOfElementLocated(campoNome));
+
         navegador.findElement(campoNome).sendKeys(nome);
         navegador.findElement(campoSobrenome).sendKeys(sobrenome);
         navegador.findElement(campoCep).sendKeys(cep);
@@ -25,6 +31,9 @@ public class PaginaCheckout {
     }
 
     public void finalizarCompra() {
+        WebDriverWait wait = new WebDriverWait(navegador, Duration.ofSeconds(10));
+        wait.until(ExpectedConditions.elementToBeClickable(botaoFinalizar));
+
         navegador.findElement(botaoFinalizar).click();
     }
 
