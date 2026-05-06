@@ -29,14 +29,16 @@ public class PaginaCheckout {
         navegador.findElement(campoSobrenome).sendKeys(sobrenome);
         navegador.findElement(campoCep).sendKeys(cep);
 
-        // Clique via JavaScript para garantir que o formulário seja enviado
-        WebElement btn = navegador.findElement(botaoContinuar);
+        WebElement btn = wait.until(ExpectedConditions.elementToBeClickable(botaoContinuar));
         ((JavascriptExecutor) navegador).executeScript("arguments[0].click();", btn);
+
+        // NOVIDADE: Espera a URL mudar para a página de revisão
+        wait.until(ExpectedConditions.urlContains("checkout-step-two"));
     }
 
     public void finalizarCompra() {
-        // Espera o botão finish aparecer e clica via JavaScript
-        WebElement btn = wait.until(ExpectedConditions.presenceOfElementLocated(botaoFinalizar));
+        // Espera o botão finish estar visível na nova URL
+        WebElement btn = wait.until(ExpectedConditions.visibilityOfElementLocated(botaoFinalizar));
         ((JavascriptExecutor) navegador).executeScript("arguments[0].click();", btn);
     }
 

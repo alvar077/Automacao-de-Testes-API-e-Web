@@ -19,14 +19,16 @@ public class TesteCompraWeb {
 
     @BeforeEach
     public void iniciarNavegador() {
-        // Opções para rodar oculto no GitHub Actions
         ChromeOptions opcoes = new ChromeOptions();
         opcoes.addArguments("--headless");
-        opcoes.addArguments("--disable-gpu");
+        opcoes.addArguments("--no-sandbox"); // Essencial para Linux/CI
+        opcoes.addArguments("--disable-dev-shm-usage"); // Evita falta de memória no container
         opcoes.addArguments("--window-size=1920,1080");
+        opcoes.addArguments("--remote-allow-origins=*");
 
         navegador = new ChromeDriver(opcoes);
-        navegador.manage().timeouts().implicitlyWait(Duration.ofSeconds(5));
+        // Tempo de espera padrão para elementos simples
+        navegador.manage().timeouts().implicitlyWait(Duration.ofSeconds(10));
         navegador.get("https://www.saucedemo.com/");
     }
 
