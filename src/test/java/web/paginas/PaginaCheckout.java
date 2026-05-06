@@ -7,6 +7,7 @@ import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.WebDriverWait;
 import java.time.Duration;
+import org.openqa.selenium.Keys;
 
 public class PaginaCheckout {
     private WebDriver navegador;
@@ -25,13 +26,12 @@ public class PaginaCheckout {
     }
 
     public void preencherDadosEContinuar(String nome, String sobrenome, String cep) {
-        wait.until(ExpectedConditions.visibilityOfElementLocated(campoNome)).sendKeys(nome);
+        WebElement inputNome = wait.until(ExpectedConditions.visibilityOfElementLocated(campoNome));
+        inputNome.sendKeys(nome);
         navegador.findElement(campoSobrenome).sendKeys(sobrenome);
-        navegador.findElement(campoCep).sendKeys(cep);
-
-        WebElement btn = wait.until(ExpectedConditions.elementToBeClickable(botaoContinuar));
-        ((JavascriptExecutor) navegador).executeScript("arguments[0].click();", btn);
-
+        WebElement inputCep = navegador.findElement(campoCep);
+        inputCep.sendKeys(cep);
+        inputCep.sendKeys(Keys.ENTER);
         wait.until(ExpectedConditions.urlContains("checkout-step-two"));
     }
 
