@@ -7,7 +7,6 @@ import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.WebDriverWait;
 import java.time.Duration;
-import org.openqa.selenium.Keys;
 
 public class PaginaCheckout {
     private WebDriver navegador;
@@ -22,22 +21,21 @@ public class PaginaCheckout {
 
     public PaginaCheckout(WebDriver navegador) {
         this.navegador = navegador;
-        this.wait = new WebDriverWait(navegador, Duration.ofSeconds(15));
+        this.wait = new WebDriverWait(navegador, Duration.ofSeconds(20));
     }
 
     public void preencherDadosEContinuar(String nome, String sobrenome, String cep) {
-        WebElement inputNome = wait.until(ExpectedConditions.visibilityOfElementLocated(campoNome));
-        inputNome.sendKeys(nome);
+        wait.until(ExpectedConditions.visibilityOfElementLocated(campoNome)).sendKeys(nome);
         navegador.findElement(campoSobrenome).sendKeys(sobrenome);
-        WebElement inputCep = navegador.findElement(campoCep);
-        inputCep.sendKeys(cep);
-        inputCep.sendKeys(Keys.ENTER);
+        navegador.findElement(campoCep).sendKeys(cep);
+        WebElement btnContinuar = wait.until(ExpectedConditions.presenceOfElementLocated(botaoContinuar));
+        ((JavascriptExecutor) navegador).executeScript("arguments[0].click();", btnContinuar);
         wait.until(ExpectedConditions.urlContains("checkout-step-two"));
     }
 
     public void finalizarCompra() {
-        WebElement btn = wait.until(ExpectedConditions.visibilityOfElementLocated(botaoFinalizar));
-        ((JavascriptExecutor) navegador).executeScript("arguments[0].click();", btn);
+        WebElement btnFinish = wait.until(ExpectedConditions.elementToBeClickable(botaoFinalizar));
+        ((JavascriptExecutor) navegador).executeScript("arguments[0].click();", btnFinish);
     }
 
     public String pegarMensagemDeSucesso() {
