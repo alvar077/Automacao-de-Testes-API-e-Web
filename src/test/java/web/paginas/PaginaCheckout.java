@@ -2,12 +2,13 @@ package web.paginas;
 
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
-import org.openqa.selenium.support.ui.WebDriverWait;
 import org.openqa.selenium.support.ui.ExpectedConditions;
+import org.openqa.selenium.support.ui.WebDriverWait;
 import java.time.Duration;
 
 public class PaginaCheckout {
     private WebDriver navegador;
+    private WebDriverWait wait;
 
     private By campoNome = By.id("first-name");
     private By campoSobrenome = By.id("last-name");
@@ -18,26 +19,26 @@ public class PaginaCheckout {
 
     public PaginaCheckout(WebDriver navegador) {
         this.navegador = navegador;
+        // Criamos o wait aqui para usar em todos os métodos
+        this.wait = new WebDriverWait(navegador, Duration.ofSeconds(10));
     }
 
     public void preencherDadosEContinuar(String nome, String sobrenome, String cep) {
-        WebDriverWait wait = new WebDriverWait(navegador, Duration.ofSeconds(10));
-        wait.until(ExpectedConditions.visibilityOfElementLocated(campoNome));
-
-        navegador.findElement(campoNome).sendKeys(nome);
+        // Espera o primeiro campo aparecer
+        wait.until(ExpectedConditions.visibilityOfElementLocated(campoNome)).sendKeys(nome);
         navegador.findElement(campoSobrenome).sendKeys(sobrenome);
         navegador.findElement(campoCep).sendKeys(cep);
-        navegador.findElement(botaoContinuar).click();
+
+        // Espera o botão continuar estar pronto e clica
+        wait.until(ExpectedConditions.elementToBeClickable(botaoContinuar)).click();
     }
 
     public void finalizarCompra() {
-        WebDriverWait wait = new WebDriverWait(navegador, Duration.ofSeconds(10));
-        wait.until(ExpectedConditions.elementToBeClickable(botaoFinalizar));
-
-        navegador.findElement(botaoFinalizar).click();
+        // Agora sim: espera o botão finish aparecer APÓS a mudança de tela
+        wait.until(ExpectedConditions.elementToBeClickable(botaoFinalizar)).click();
     }
 
     public String pegarMensagemDeSucesso() {
-        return navegador.findElement(mensagemDeSucesso).getText();
+        return wait.until(ExpectedConditions.visibilityOfElementLocated(mensagemDeSucesso)).getText();
     }
 }
