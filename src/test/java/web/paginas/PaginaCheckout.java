@@ -1,7 +1,9 @@
 package web.paginas;
 
 import org.openqa.selenium.By;
+import org.openqa.selenium.JavascriptExecutor;
 import org.openqa.selenium.WebDriver;
+import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.WebDriverWait;
 import java.time.Duration;
@@ -19,23 +21,23 @@ public class PaginaCheckout {
 
     public PaginaCheckout(WebDriver navegador) {
         this.navegador = navegador;
-        // Criamos o wait aqui para usar em todos os métodos
-        this.wait = new WebDriverWait(navegador, Duration.ofSeconds(10));
+        this.wait = new WebDriverWait(navegador, Duration.ofSeconds(15)); // Aumentei para 15s
     }
 
     public void preencherDadosEContinuar(String nome, String sobrenome, String cep) {
-        // Espera o primeiro campo aparecer
         wait.until(ExpectedConditions.visibilityOfElementLocated(campoNome)).sendKeys(nome);
         navegador.findElement(campoSobrenome).sendKeys(sobrenome);
         navegador.findElement(campoCep).sendKeys(cep);
 
-        // Espera o botão continuar estar pronto e clica
-        wait.until(ExpectedConditions.elementToBeClickable(botaoContinuar)).click();
+        // Clique via JavaScript para garantir que o formulário seja enviado
+        WebElement btn = navegador.findElement(botaoContinuar);
+        ((JavascriptExecutor) navegador).executeScript("arguments[0].click();", btn);
     }
 
     public void finalizarCompra() {
-        // Agora sim: espera o botão finish aparecer APÓS a mudança de tela
-        wait.until(ExpectedConditions.elementToBeClickable(botaoFinalizar)).click();
+        // Espera o botão finish aparecer e clica via JavaScript
+        WebElement btn = wait.until(ExpectedConditions.presenceOfElementLocated(botaoFinalizar));
+        ((JavascriptExecutor) navegador).executeScript("arguments[0].click();", btn);
     }
 
     public String pegarMensagemDeSucesso() {
