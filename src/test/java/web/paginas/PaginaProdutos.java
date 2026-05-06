@@ -1,7 +1,9 @@
 package web.paginas;
 
 import org.openqa.selenium.By;
+import org.openqa.selenium.JavascriptExecutor;
 import org.openqa.selenium.WebDriver;
+import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.WebDriverWait;
 
@@ -18,11 +20,15 @@ public class PaginaProdutos {
     }
 
     public void adicionarMochilaAoCarrinho() {
-        navegador.findElement(botaoAdicionarMochila).click();
+        WebDriverWait wait = new WebDriverWait(navegador, Duration.ofSeconds(15));
+        WebElement botaoAdd = wait.until(ExpectedConditions.elementToBeClickable(botaoAdicionarMochila));
+        ((JavascriptExecutor) navegador).executeScript("arguments[0].click();", botaoAdd);
+        wait.until(ExpectedConditions.visibilityOfElementLocated(By.className("shopping_cart_badge")));
     }
 
     public void acessarCarrinho() {
-        WebDriverWait wait = new WebDriverWait(navegador, Duration.ofSeconds(10));
-        wait.until(ExpectedConditions.elementToBeClickable(iconeCarrinho)).click();
+        WebDriverWait wait = new WebDriverWait(navegador, Duration.ofSeconds(15));
+        WebElement carrinho = navegador.findElement(iconeCarrinho);
+        ((JavascriptExecutor) navegador).executeScript("arguments[0].click();", carrinho);
     }
 }

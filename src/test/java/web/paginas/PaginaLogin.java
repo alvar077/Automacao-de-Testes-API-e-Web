@@ -19,8 +19,8 @@ public class PaginaLogin {
         WebDriverWait wait = new WebDriverWait(navegador, Duration.ofSeconds(15));
         wait.until(ExpectedConditions.visibilityOfElementLocated(By.id("user-name"))).sendKeys(usuario);
         navegador.findElement(By.id("password")).sendKeys(senha);
-
         WebElement botao = navegador.findElement(By.id("login-button"));
         ((JavascriptExecutor) navegador).executeScript("arguments[0].click();", botao);
+        wait.until(ExpectedConditions.urlContains("inventory.html"));
     }
 }
