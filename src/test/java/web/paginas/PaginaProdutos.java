@@ -2,6 +2,10 @@ package web.paginas;
 
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
+import org.openqa.selenium.support.ui.ExpectedConditions;
+import org.openqa.selenium.support.ui.WebDriverWait;
+
+import java.time.Duration;
 
 public class PaginaProdutos {
     private WebDriver navegador;
@@ -18,6 +22,7 @@ public class PaginaProdutos {
     }
 
     public void acessarCarrinho() {
-        navegador.findElement(iconeCarrinho).click();
+        WebDriverWait wait = new WebDriverWait(navegador, Duration.ofSeconds(10));
+        wait.until(ExpectedConditions.elementToBeClickable(iconeCarrinho)).click();
     }
 }
