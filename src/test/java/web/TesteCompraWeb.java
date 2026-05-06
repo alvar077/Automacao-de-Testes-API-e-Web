@@ -21,13 +21,12 @@ public class TesteCompraWeb {
     public void iniciarNavegador() {
         ChromeOptions opcoes = new ChromeOptions();
         opcoes.addArguments("--headless");
-        opcoes.addArguments("--no-sandbox"); // Essencial para Linux/CI
-        opcoes.addArguments("--disable-dev-shm-usage"); // Evita falta de memória no container
+        opcoes.addArguments("--no-sandbox");
+        opcoes.addArguments("--disable-dev-shm-usage");
         opcoes.addArguments("--window-size=1920,1080");
         opcoes.addArguments("--remote-allow-origins=*");
 
         navegador = new ChromeDriver(opcoes);
-        // Tempo de espera padrão para elementos simples
         navegador.manage().timeouts().implicitlyWait(Duration.ofSeconds(10));
         navegador.get("https://www.saucedemo.com/");
     }
@@ -38,18 +37,13 @@ public class TesteCompraWeb {
         PaginaProdutos paginaProdutos = new PaginaProdutos(navegador);
         PaginaCarrinho paginaCarrinho = new PaginaCarrinho(navegador);
         PaginaCheckout paginaCheckout = new PaginaCheckout(navegador);
-
-        // O fluxo do usuário interagindo com a página
         paginaLogin.fazerLogin("standard_user", "secret_sauce");
         paginaProdutos.adicionarMochilaAoCarrinho();
         paginaProdutos.acessarCarrinho();
-
         paginaCarrinho.clicarNoCheckout();
-
         paginaCheckout.preencherDadosEContinuar("Joao", "Silva", "12345-678");
         paginaCheckout.finalizarCompra();
 
-        // Verificando se deu certo
         String mensagem = paginaCheckout.pegarMensagemDeSucesso();
         assertEquals("Thank you for your order!", mensagem);
     }
@@ -57,7 +51,7 @@ public class TesteCompraWeb {
     @AfterEach
     public void fecharNavegador() {
         if (navegador != null) {
-            navegador.quit(); // Encerra o Chrome ao final do teste
+            navegador.quit();
         }
     }
 }

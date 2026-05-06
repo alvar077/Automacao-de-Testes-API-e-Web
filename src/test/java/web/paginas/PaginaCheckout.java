@@ -21,7 +21,7 @@ public class PaginaCheckout {
 
     public PaginaCheckout(WebDriver navegador) {
         this.navegador = navegador;
-        this.wait = new WebDriverWait(navegador, Duration.ofSeconds(15)); // Aumentei para 15s
+        this.wait = new WebDriverWait(navegador, Duration.ofSeconds(15));
     }
 
     public void preencherDadosEContinuar(String nome, String sobrenome, String cep) {
@@ -32,12 +32,10 @@ public class PaginaCheckout {
         WebElement btn = wait.until(ExpectedConditions.elementToBeClickable(botaoContinuar));
         ((JavascriptExecutor) navegador).executeScript("arguments[0].click();", btn);
 
-        // NOVIDADE: Espera a URL mudar para a página de revisão
         wait.until(ExpectedConditions.urlContains("checkout-step-two"));
     }
 
     public void finalizarCompra() {
-        // Espera o botão finish estar visível na nova URL
         WebElement btn = wait.until(ExpectedConditions.visibilityOfElementLocated(botaoFinalizar));
         ((JavascriptExecutor) navegador).executeScript("arguments[0].click();", btn);
     }
